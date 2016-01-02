@@ -55,19 +55,16 @@ $(function() {
         // Confirm that menu state changes on click
         it('should change visibility when the menu icon is clicked', function() {
 
-            // Check if menu is hidden
+            // Fundction to check if menu is hidden
             function checkHidden() {
                return $('body').hasClass('menu-hidden');
             }
 
-            var menuIcon = $('.menu-icon-link');
+            // Check if menu is hidden before click
             var menuHiddenBefore = checkHidden();
 
-            // Watch for menuIcon clicks
-            var spyEvent = spyOn(menuIcon, 'click');
-
             // Trigger a menu click and rechick menu hidden status
-            menuIcon.trigger( "click" );
+            $('.menu-icon-link').trigger( "click" );
             menuHiddenAfter = checkHidden();
 
             expect(menuHiddenBefore).not.toEqual(menuHiddenAfter);
@@ -82,8 +79,10 @@ $(function() {
         // Use 'done' to ensure that the feed is loaded before the test is run
         beforeEach(function(done) {
 
-            // Use 'done" as callback parameter to let Jasmine know we're
-            // going  async
+            // Empty feed before loading
+            $('.feed');
+
+            // Use 'done" as callback parameter to let Jasmine know we're async
             loadFeed(0, done);
         });
 
@@ -101,18 +100,66 @@ $(function() {
 
     });
 
-    /* TODO: Write a new test suite named "New Feed Selection"*/
+    // Confirm that content changes when a new feed loads
     describe('New Feed Selection', function() {
 
+        // Declare needed variables
+        var titleBefore,
+            titleAfter,
+            entryBefore,
+            entryAfter;
 
-        /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
-         it('should and change', function() {
+        // Functions to get title and entry text from current feed
+        function getFeedTitle() {
+            return  $('.header-title').text();
+        }
 
-         });
+        function getFeedEntry() {
+            return  $('.entry h2').first().text();
+        }
+
+        // Use 'done' to ensure that the feed is loaded before the test is run
+        beforeEach(function(done) {
+
+            // Empty feed before loading
+            $('.feed').empty();
+
+            // Load feed and get title and entry text
+            loadFeed(0, function() {
+                titleBefore = getFeedTitle();
+                entryBefore = getFeedEntry();
+                done();
+            });
+        });
+
+        // Check for title change
+        it('should change first entry title', function(done) {
+            loadFeed(1, function() {
+                titleAfter = getFeedTitle();
+                expect(titleAfter).not.toEqual(titleBefore);
+                done();
+            });
+        });
+
+        // Check for entry text change
+        it('should change first entry text', function(done) {
+            loadFeed(1, function() {
+                entryAfter = getFeedEntry();
+                expect(entryAfter).not.toEqual(entryBefore);
+                done();
+            });
+        });
+
     });
+
+
+
+
+/*TODO:  Add other tests.
+    * Entry has content snippet and url - get info from DOM
+    * Click count (future feature) - similar to menu button click
+    * Refresh button (future feature) - similar to check content when new feed
+*/
 
 }());
 
