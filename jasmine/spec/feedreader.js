@@ -51,7 +51,7 @@ $(function() {
 
         // Confirm that menu is hidden by default
         it('should be hidden by default', function() {
-            expect( $('body').hasClass('menu-hidden')).toBe(true);
+            expect( $('body').hasClass('menu-hidden')).toBeTruthy();
         });
 
 
@@ -59,53 +59,33 @@ $(function() {
         var menuHiddenBefore,
             menuHiddenAfter;
 
-        // Function to check if menu is hidden
-        function checkHiddenClass() {
-           return $('body').hasClass('menu-hidden');
-        }
-
-        function toggleMenu() {
+        // Confirm that menu state changes on click
+        it('toggles visibility when menu icon is clicked', function() {
 
             // Check if menu is hidden before click
-            menuHiddenBefore = checkHiddenClass();
+            menuHiddenBefore = $('body').hasClass('menu-hidden');
 
-            // Trigger a menu click and rechick menu hidden status
+            // Trigger a menu click and re-check menu hidden status
             $('.menu-icon-link').trigger( "click" );
-            menuHiddenAfter = checkHiddenClass();
-        }
+            menuHiddenAfter = $('body').hasClass('menu-hidden');
 
-        // Confirm that menu state changes on click
-        it('should be shown on the first click', function() {
-
-            // Toggle menu and check expectation
-            toggleMenu();
+            // Check expectation
             expect(menuHiddenBefore).not.toEqual(menuHiddenAfter);
 
-        });
+            // Reset 'menuHiddenBefore' before click
+            menuHiddenBefore = $('body').hasClass('menu-hidden');
 
-        it('should be hidden on the second click', function() {
+            // Trigger a menu click and re-check menu hidden status
+            $('.menu-icon-link').trigger( "click" );
+            menuHiddenAfter = $('body').hasClass('menu-hidden');
 
-            // Toggle menu and check expectation
-            toggleMenu();
+            // Check expectation
             expect(menuHiddenBefore).not.toEqual(menuHiddenAfter);
 
         });
 
 
     });
-
-    // Functions to get title,  url and entry text from current feed
-    function getFeedTitle() {
-        return  $('.header-title').text();
-    }
-
-    function getFeedURL() {
-        return  $('.entry-link').first().attr('href');
-    }
-
-    function getFeedEntry() {
-        return  $('.entry h2').first().text();
-    }
 
     // Confirm that at least one entry is loaded in the .feed container
     describe('Initial Entries', function() {
@@ -114,118 +94,82 @@ $(function() {
         beforeEach(function(done) {
 
             // Empty feed before loading
-            $('.feed');
+            $('.feed').empty();
 
             // Use 'done" as callback parameter to let Jasmine know we're async
             loadFeed(0, done);
         });
 
-        it('should include at least one entry element', function(done) {
+        it('should include at least one entry element', function() {
 
-            // Get the length of the HTML in the div
-            var feedLength  = $('.feed').html().length;
+            // Get the length of the feed HTML to conirm that it is not empty
+            expect($('.feed').html().length).toBeGreaterThan(0);
 
-            // Confirm that the div is not emptry
-            expect(feedLength).toBeGreaterThan(0);
-
-            // Call 'done()' to let Jasmine know were going async
-            done();
         });
 
         // Confirm that the first entry element is not empty
-        describe('First Entry Element', function(done) {
+        describe('First Entry Element', function() {
 
-            it('should contain entry text', function(done) {
+            it('should have a defined non-empty entry heading and url', function() {
 
-                // Get the text of first entry and confirm it is not empty
-                var entry = getFeedEntry();
-                expect(entry).toBeTruthy();
-
-                // Call 'done()' to let Jasmine know were going async
-                done();
-            });
-
-
-            it('should have a non-empty url', function(done) {
+                // Get the heading of first entry and confirm it is not empty
+                expect($('.entry h2').first().text()).toBeTruthy();
 
                 // Get the url of first entry and confirm it is not empty
-                var url = getFeedURL();
-                expect(url).toBeTruthy();
+                expect($('.entry-link').first().attr('href')).toBeTruthy();
 
-                // Call 'done()' to let Jasmine know were going async
-                done();
             });
         });
     });
 
     // Confirm that content changes when a new feed loads
-    function checkFeedChange(oldFeedIndex, newFeedIndex) {
+    describe('New Feed Selection', function() {
 
         // Declare needed variables
-        var currentFeedName = allFeeds[oldFeedIndex].name;
-        var newFeedName = allFeeds[newFeedIndex].name;
-        var testTitle = 'Change from ' + currentFeedName + ' to ' + newFeedName;
+        var titleBefore,
+            titleAfter,
+            htmlBefore,
+            htmlAfter;
 
-        describe(testTitle, function() {
+        // Use 'done' to ensure that the feed is loaded before the test is run
+        beforeEach(function(done) {
 
-            // Declare needed variables
-            var titleBefore,
-                titleAfter,
-                entryBefore,
-                entryAfter;
+            // Empty feed before loading
+            $('.feed').empty();
 
-            // Use 'done' to ensure that the feed is loaded before the test is run
-            beforeEach(function(done) {
-
-                // Empty feed before loading
-                $('.feed').empty();
-
-                // Load feed and get title and entry text
-                loadFeed( oldFeedIndex, function() {
-                    titleBefore = getFeedTitle();
-                    entryBefore = getFeedEntry();
-                    done();
-                });
+            // Load feed and get title and feed html
+            loadFeed( 0, function() {
+                titleBefore = $('.header-title').text();
+                htmlBefore = $('.feed').html();
+                done();
             });
-
-            // Check for feed title change
-            it('should change feed title', function(done) {
-                loadFeed(newFeedIndex, function() {
-                    titleAfter = getFeedTitle();
-                    expect(titleAfter).not.toEqual(titleBefore);
-                    done();
-                });
-            });
-
-            // Check for entry text change
-            it('should change first entry text', function(done) {
-                loadFeed(newFeedIndex, function() {
-                    entryAfter = getFeedEntry();
-                    expect(entryAfter).not.toEqual(entryBefore);
-                    done();
-                });
-            });
-
         });
 
-    }
+        // Check for feed title and content change
+        it('should change feed title and content', function(done) {
+            loadFeed(1, function() {
 
-    // Calculate number o feeds to check
-    var  numFeeds = allFeeds.length;
+                // Check title and feed html after load
+                titleAfter = $('.header-title').text();
+                htmlAfter = $('.feed').html();
 
-    // Check the feed changes after the initial load
-    for (var i = 1; i < numFeeds; i ++) {
+                // Confirm taht both have changed
+                expect(titleAfter).not.toEqual(titleBefore);
+                expect(htmlAfter).not.toEqual(htmlBefore);
+                done();
+            });
+        });
 
-        checkFeedChange(i - 1, i);
-    }
+         // Re-load the default content
+        afterAll(function(done) {
+            loadFeed(0, done);
+        });
 
-    // Confirm that changing back to intial feed also works
-    checkFeedChange(numFeeds - 1, 0);
-
+    });
 
     /****************   TEST FOR FUTURE FEATURES   *******************/
 
-    // Confirm that RSS feeds are defined in our application.
+    // Confirm that clicks are incremented when a feed entry is cl
     describe('Click Counts', function() {
 
         // Use 'done' to ensure that the feed is loaded before the test is run
@@ -256,5 +200,3 @@ $(function() {
     });
 
 }());
-
-
