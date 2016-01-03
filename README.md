@@ -26,7 +26,7 @@ The purpose of this project is to finish the Jasmine testing suite for a web-bas
 Feed click counts:
 * Assumptions:
   * New property "clickCount" will be added to allFeeds objects
-  * Click function will be added to feed container to increment clicks on that feed
+  * Click function will be added to entries to increment clicks on that feed
 
 * Test function: confirms that "clickCount" property is incremented as expected
 
