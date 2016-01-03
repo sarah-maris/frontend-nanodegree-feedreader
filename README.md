@@ -2,7 +2,7 @@
 
 The purpose of this project is to finish the Jasmine testing suite for a web-based application that reads RSS feeds.
 
-### Required Tests (All tests pass)
+## Required Tests (All tests pass)
 
 1. Confirm that the allFeeds variable is defined and not empty
 
@@ -21,7 +21,7 @@ The purpose of this project is to finish the Jasmine testing suite for a web-bas
 
 * Loop through feeds and confirm that content changes for all feed loads (not just first change)
 
-### Tests for Future Feature (Test fails)
+## Tests for Future Feature (Test fails)
 
 Feed click counts:
 * Assumptions:
@@ -31,5 +31,5 @@ Feed click counts:
 * Test function: confirms that "clickCount" property is incremented as expected
 
 
-###Resources Used:
+## Resources Used:
 [Jasmine JavaScript Testing Framework](http://jasmine.github.io/)

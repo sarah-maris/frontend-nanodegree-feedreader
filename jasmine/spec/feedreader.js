@@ -10,6 +10,8 @@
  */
 $(function() {
 
+    /****************   TEST FOR CURRENT FEATURES   *******************/
+
     // Confirm that RSS feeds are defined in our application.
     describe('RSS Feeds', function() {
 
@@ -120,7 +122,7 @@ $(function() {
 
         it('should include at least one entry element', function(done) {
 
-            // Get the kength of the HTML in the div
+            // Get the length of the HTML in the div
             var feedLength  = $('.feed').html().length;
 
             // Confirm that the div is not emptry
@@ -220,10 +222,38 @@ $(function() {
     // Confirm that changing back to intial feed also works
     checkFeedChange(numFeeds - 1, 0);
 
-/*TODO:  Add other tests.
-    * Click count (future feature) - similar to menu button click
-    * Refresh button (future feature) - similar to check content when new feed
-*/
+
+    /****************   TEST FOR FUTURE FEATURES   *******************/
+
+    // Confirm that RSS feeds are defined in our application.
+    describe('Click Counts', function() {
+
+        // Use 'done' to ensure that the feed is loaded before the test is run
+        beforeEach(function(done) {
+
+            // Use 'done" as callback parameter to let Jasmine know we're async
+            loadFeed(0, done);
+        });
+
+        it('should updated when a feed item is clicked', function(done) {
+
+            // Check the click count of the feed before the click
+            var clickCountBefore = allFeeds[0].clickCount;
+
+
+            // Trigger a click and recheck click count
+             $('.entry-link').trigger( "click" );
+            var clickCountAfter = allFeeds[0].clickCount;
+
+            // Confirm that the clickCount increments
+            expect(clickCountAfter).toBe(clickCountBefore + 1);
+
+            // Call 'done()' to let Jasmine know were going async
+            done();
+        });
+
+
+    });
 
 }());
 
