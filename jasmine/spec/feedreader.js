@@ -188,8 +188,8 @@ $(function() {
                 });
             });
 
-            // Check for title change
-            it('should change first entry title', function(done) {
+            // Check for feed title change
+            it('should change feed title', function(done) {
                 loadFeed(newFeedIndex, function() {
                     titleAfter = getFeedTitle();
                     expect(titleAfter).not.toEqual(titleBefore);
