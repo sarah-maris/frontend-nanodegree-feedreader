@@ -52,24 +52,43 @@ $(function() {
             expect( $('body').hasClass('menu-hidden')).toBe(true);
         });
 
-        // Confirm that menu state changes on click
-        it('should change visibility when the menu icon is clicked', function() {
 
-            // Fundction to check if menu is hidden
-            function checkHidden() {
-               return $('body').hasClass('menu-hidden');
-            }
+        // Declare needed variables
+        var menuHiddenBefore,
+            menuHiddenAfter;
+
+        // Function to check if menu is hidden
+        function checkHiddenClass() {
+           return $('body').hasClass('menu-hidden');
+        }
+
+        function toggleMenu() {
 
             // Check if menu is hidden before click
-            var menuHiddenBefore = checkHidden();
+            menuHiddenBefore = checkHiddenClass();
 
             // Trigger a menu click and rechick menu hidden status
             $('.menu-icon-link').trigger( "click" );
-            menuHiddenAfter = checkHidden();
+            menuHiddenAfter = checkHiddenClass();
+        }
 
+        // Confirm that menu state changes on click
+        it('should be shown on the first click', function() {
+
+            // Toggle menu and check expectation
+            toggleMenu();
             expect(menuHiddenBefore).not.toEqual(menuHiddenAfter);
 
         });
+
+        it('should be hidden on the second click', function() {
+
+            // Toggle menu and check expectation
+            toggleMenu();
+            expect(menuHiddenBefore).not.toEqual(menuHiddenAfter);
+
+        });
+
 
     });
 
@@ -100,15 +119,13 @@ $(function() {
 
     });
 
-
-
-
-    function checkFeedChange(oldFeedIndex, newFeedIndex) {
     // Confirm that content changes when a new feed loads
+    function checkFeedChange(oldFeedIndex, newFeedIndex) {
 
-    var currentFeedName = allFeeds[oldFeedIndex].name;
-    var newFeedName = allFeeds[newFeedIndex].name;
-    var testTitle = 'Change from ' + currentFeedName + ' to ' + newFeedName;
+        // Declare needed variables
+        var currentFeedName = allFeeds[oldFeedIndex].name;
+        var newFeedName = allFeeds[newFeedIndex].name;
+        var testTitle = 'Change from ' + currentFeedName + ' to ' + newFeedName;
 
         describe(testTitle, function() {
 
