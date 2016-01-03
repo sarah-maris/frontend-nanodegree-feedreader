@@ -100,60 +100,84 @@ $(function() {
 
     });
 
+
+
+
+    function checkFeedChange(oldFeedIndex, newFeedIndex) {
     // Confirm that content changes when a new feed loads
-    describe('New Feed Selection', function() {
 
-        // Declare needed variables
-        var titleBefore,
-            titleAfter,
-            entryBefore,
-            entryAfter;
+    var currentFeedName = allFeeds[oldFeedIndex].name;
+    var newFeedName = allFeeds[newFeedIndex].name;
+    var testTitle = 'Change from ' + currentFeedName + ' to ' + newFeedName;
 
-        // Functions to get title and entry text from current feed
-        function getFeedTitle() {
-            return  $('.header-title').text();
-        }
+        describe(testTitle, function() {
 
-        function getFeedEntry() {
-            return  $('.entry h2').first().text();
-        }
+            // Declare needed variables
+            var titleBefore,
+                titleAfter,
+                entryBefore,
+                entryAfter;
 
-        // Use 'done' to ensure that the feed is loaded before the test is run
-        beforeEach(function(done) {
 
-            // Empty feed before loading
-            $('.feed').empty();
 
-            // Load feed and get title and entry text
-            loadFeed(0, function() {
-                titleBefore = getFeedTitle();
-                entryBefore = getFeedEntry();
-                done();
+            // Functions to get title and entry text from current feed
+            function getFeedTitle() {
+                return  $('.header-title').text();
+            }
+
+            function getFeedEntry() {
+                return  $('.entry h2').first().text();
+            }
+
+
+
+            // Use 'done' to ensure that the feed is loaded before the test is run
+            beforeEach(function(done) {
+
+                // Empty feed before loading
+                $('.feed').empty();
+
+                // Load feed and get title and entry text
+                loadFeed( oldFeedIndex, function() {
+                    titleBefore = getFeedTitle();
+                    entryBefore = getFeedEntry();
+                    done();
+                });
             });
+
+            // Check for title change
+            it('should change first entry title', function(done) {
+                loadFeed(newFeedIndex, function() {
+                    titleAfter = getFeedTitle();
+                    expect(titleAfter).not.toEqual(titleBefore);
+                    done();
+                });
+            });
+
+            // Check for entry text change
+            it('should change first entry text', function(done) {
+                loadFeed(newFeedIndex, function() {
+                    entryAfter = getFeedEntry();
+                    expect(entryAfter).not.toEqual(entryBefore);
+                    done();
+                });
+            });
+
         });
 
-        // Check for title change
-        it('should change first entry title', function(done) {
-            loadFeed(1, function() {
-                titleAfter = getFeedTitle();
-                expect(titleAfter).not.toEqual(titleBefore);
-                done();
-            });
-        });
+    }
 
-        // Check for entry text change
-        it('should change first entry text', function(done) {
-            loadFeed(1, function() {
-                entryAfter = getFeedEntry();
-                expect(entryAfter).not.toEqual(entryBefore);
-                done();
-            });
-        });
+    // Calculate number o feeds to check
+    var  numFeeds = allFeeds.length;
 
-    });
+    // Check the feed changes after the initial load
+    for (var i = 1; i < numFeeds; i ++) {
 
+        checkFeedChange(i - 1, i);
+    }
 
-
+    // Confirm that changing back to intial feed also works
+    checkFeedChange(numFeeds - 1, 0);
 
 /*TODO:  Add other tests.
     * Entry has content snippet and url - get info from DOM
