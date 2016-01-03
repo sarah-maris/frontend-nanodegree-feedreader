@@ -21,7 +21,15 @@ The purpose of this project is to finish the Jasmine testing suite for a web-bas
 
 * Loop through feeds and confirm that content changes for all feed loads (not just first change)
 
-## Tests for Future Features (Test fail)
+## Tests for Future Feature (Test fail)
+
+Feed click counts:
+* Assumptions:
+** New property "clickCount" will be added to allFeeds objects
+** Click function will be added to feed container to increment clicks on that feed
+
+* Test function: confirms that "clickCount" property is incremented as expected
+
 
 
 Resources:
