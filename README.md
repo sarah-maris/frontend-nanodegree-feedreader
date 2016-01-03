@@ -2,6 +2,11 @@
 
 The purpose of this project is to finish the Jasmine testing suite for a web-based application that reads RSS feeds.
 
+## How to Run the App
+1. Load feed-reader.html in your favorite browser.
+2. Tests will take about 5 seconds to complete.  You will experience several page refreshes as the code runs.
+3. When the test completes, scroll down to the bottom of the page to see the results.
+
 ## Required Tests (All tests pass)
 
 1. Confirm that the allFeeds variable is defined and not empty
