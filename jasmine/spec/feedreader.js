@@ -92,6 +92,19 @@ $(function() {
 
     });
 
+    // Functions to get title,  url and entry text from current feed
+    function getFeedTitle() {
+        return  $('.header-title').text();
+    }
+
+    function getFeedURL() {
+        return  $('.entry-link').first().attr('href');
+    }
+
+    function getFeedEntry() {
+        return  $('.entry h2').first().text();
+    }
+
     // Confirm that at least one entry is loaded in the .feed container
     describe('Initial Entries', function() {
 
@@ -117,6 +130,30 @@ $(function() {
             done();
         });
 
+        // Confirm that the first entry element is not empty
+        describe('First Entry Element', function(done) {
+
+            it('should contain entry text', function(done) {
+
+                // Get the text of first entry and confirm it is not empty
+                var entry = getFeedEntry();
+                expect(entry).toBeTruthy();
+
+                // Call 'done()' to let Jasmine know were going async
+                done();
+            });
+
+
+            it('should have a non-empty url', function(done) {
+
+                // Get the url of first entry and confirm it is not empty
+                var url = getFeedURL();
+                expect(url).toBeTruthy();
+
+                // Call 'done()' to let Jasmine know were going async
+                done();
+            });
+        });
     });
 
     // Confirm that content changes when a new feed loads
@@ -134,19 +171,6 @@ $(function() {
                 titleAfter,
                 entryBefore,
                 entryAfter;
-
-
-
-            // Functions to get title and entry text from current feed
-            function getFeedTitle() {
-                return  $('.header-title').text();
-            }
-
-            function getFeedEntry() {
-                return  $('.entry h2').first().text();
-            }
-
-
 
             // Use 'done' to ensure that the feed is loaded before the test is run
             beforeEach(function(done) {
@@ -197,7 +221,6 @@ $(function() {
     checkFeedChange(numFeeds - 1, 0);
 
 /*TODO:  Add other tests.
-    * Entry has content snippet and url - get info from DOM
     * Click count (future feature) - similar to menu button click
     * Refresh button (future feature) - similar to check content when new feed
 */
