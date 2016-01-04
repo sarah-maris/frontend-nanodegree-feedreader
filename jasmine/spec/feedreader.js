@@ -21,29 +21,20 @@ $(function() {
             expect(allFeeds.length).not.toBe(0);
         });
 
-         // Test to loop through feeds and confirm that feed url and name
-         // are defined and not empty
-         function feedsDefined(feed) {
-
-            describe(feed.name, function() {
-
-                //Check that url is defined and not empty
-                it('should have a non-empty URL', function(){
-                    expect(feed.url).toBeTruthy();
-                });
-
-                //Check that name is defined and not empty
-                it('should have a non-empty name', function(){
-                    expect(feed.name).toBeTruthy();
-                });
-
+        //Check that each url is defined and not empty
+        it('should have non-empty URLs', function(){
+            allFeeds.forEach(function (feed) {
+                expect(feed.url).toBeTruthy();
             });
-        }
-
-        // Call test to confirm that each feed is defined
-        allFeeds.forEach(function (feed) {
-            feedsDefined(feed);
         });
+
+        //Check that each name is defined and not empty
+        it('should have non-empty names', function(){
+            allFeeds.forEach(function (feed) {
+                expect(feed.name).toBeTruthy();
+            });
+        });
+
     });
 
     // Confirm that the menu works as expected
@@ -60,7 +51,7 @@ $(function() {
             menuHiddenAfter;
 
         // Confirm that menu state changes on click
-        it('toggles visibility when menu icon is clicked', function() {
+        it('should toggle visibility when menu icon is clicked', function() {
 
             // Check if menu is hidden before click
             menuHiddenBefore = $('body').hasClass('menu-hidden');
@@ -107,18 +98,30 @@ $(function() {
 
         });
 
-        // Confirm that the first entry element is not empty
-        describe('First Entry Element', function() {
+    });
 
-            it('should have a defined non-empty entry heading and url', function() {
 
-                // Get the heading of first entry and confirm it is not empty
-                expect($('.entry h2').first().text()).toBeTruthy();
+    // Confirm that the first entry element is not empty
+    describe('First Entry Element', function() {
 
-                // Get the url of first entry and confirm it is not empty
-                expect($('.entry-link').first().attr('href')).toBeTruthy();
+        // Use 'done' to ensure that the feed is loaded before the test is run
+        beforeEach(function(done) {
 
-            });
+            // Empty feed before loading
+            $('.feed').empty();
+
+            // Use 'done" as callback parameter to let Jasmine know we're async
+            loadFeed(0, done);
+        });
+
+        it('should have a defined non-empty entry heading and url', function() {
+
+            // Get the heading of first entry and confirm it is not empty
+            expect($('.entry h2').first().text()).toBeTruthy();
+
+            // Get the url of first entry and confirm it is not empty
+            expect($('.entry-link').first().attr('href')).toBeTruthy();
+
         });
     });
 
