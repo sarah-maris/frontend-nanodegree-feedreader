@@ -15,7 +15,7 @@ The purpose of this project is to finish the Jasmine testing suite for a web-bas
 5. Confirm that initial entries are loaded
 6. Confirm that the content changes when a new feed is loaded
 
-## Additional Test of existing features (Test passes)
+## Additional Test of Existing Features (Test passes)
 Confirm that the first entry element contains entry text and a non-empty url
 
 ## Tests for Future Feature (Test fails)
